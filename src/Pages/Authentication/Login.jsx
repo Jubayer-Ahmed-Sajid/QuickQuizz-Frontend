@@ -58,7 +58,9 @@ const Login = () => {
             onChange={formik.handleChange}
             value={formik.values.email}
           />
-
+          {formik.touched.email && formik.errors.email ? (
+            <p className="text-red-400 text-md">{formik.errors.email}</p>
+          ) : null}
           <Input
             label="Password"
             size="lg"
@@ -68,7 +70,9 @@ const Login = () => {
             onChange={formik.handleChange}
             value={formik.values.password}
           />
-
+          {formik.touched.password && formik.errors.password ? (
+            <p className="text-red-400 text-md">{formik.errors.password}</p>
+          ) : null}
           <div className="-ml-2.5">
             <Checkbox label="Remember Me" />
           </div>

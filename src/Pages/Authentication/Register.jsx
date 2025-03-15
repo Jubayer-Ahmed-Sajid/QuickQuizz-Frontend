@@ -9,7 +9,7 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { useFormik } from "formik";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 
 const Register = () => {
   const formik = useFormik({
@@ -19,17 +19,18 @@ const Register = () => {
       password: "",
     },
     validationSchema: Yup.object({
-        name: Yup.string()
-          .max(15, 'Must be 15 characters or less')
-          .required('Required'),
-        email: Yup.string().email('Invalid email address').required('Required'),
-        password: Yup.string()
-          .min(8, 'Must be 8 characters or more').matches(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])/,
-            "Must Contain One Uppercase, One Lowercase, One Number and One Special Case Character"
-          )
-          .required('Required'),
-      }),
+      name: Yup.string()
+        .max(15, "Must be 15 characters or less")
+        .required("Required"),
+      email: Yup.string().email("Invalid email address").required("Required"),
+      password: Yup.string()
+        .min(8, "Must be 8 characters or more")
+        .matches(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])/,
+          "Must Contain One Uppercase, One Lowercase, One Number and One Special Case Character"
+        )
+        .required("Required"),
+    }),
     onSubmit: (values) => {
       console.log(values);
     },
@@ -61,6 +62,9 @@ const Register = () => {
             onChange={formik.handleChange}
             value={formik.values.name}
           />
+          {formik.touched.name && formik.errors.name ? (
+            <p className="text-red-400 text-md">{formik.errors.name}</p>
+          ) : null}
           <Input
             label="Email"
             size="lg"
@@ -70,6 +74,9 @@ const Register = () => {
             onChange={formik.handleChange}
             value={formik.values.email}
           />
+          {formik.touched.email && formik.errors.email ? (
+            <p className="text-red-400 text-md">{formik.errors.email}</p>
+          ) : null}
           <Input
             label="Password"
             size="lg"
@@ -79,6 +86,9 @@ const Register = () => {
             onChange={formik.handleChange}
             value={formik.values.password}
           />
+          {formik.touched.password && formik.errors.password ? (
+            <p className="text-red-400 text-md">{formik.errors.password}</p>
+          ) : null}
           <div className="-ml-2.5">
             <Checkbox label="Remember Me" />
           </div>
@@ -101,7 +111,6 @@ const Register = () => {
             </Typography>
           </Typography>
         </CardFooter>
-        
       </Card>
     </form>
   );
