@@ -14,7 +14,7 @@ import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import useAuth from "../../Hooks/useAuth";
 import { toast } from "sonner";
 import { FcGoogle } from "react-icons/fc";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 const Register = () => {
   const axiosPublic = useAxiosPublic();
   const location = useLocation();
@@ -162,15 +162,10 @@ const Register = () => {
           </Button>
           <Typography variant="small" className="mt-6 flex justify-center">
             Already have an account?
-            <Typography
-              as="a"
-              href="#signup"
-              variant="small"
-              color="blue-gray"
-              className="ml-1 font-bold"
-            >
-              Login
-            </Typography>
+            <Link to="/login" className="ml-1 font-bold text-blue-gray-500">
+           
+             Login
+            </Link>
           </Typography>
         </CardFooter>
       </Card>

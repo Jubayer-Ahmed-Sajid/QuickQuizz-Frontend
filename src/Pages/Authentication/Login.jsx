@@ -12,7 +12,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import useAuth from "../../Hooks/useAuth";
 import { toast } from "sonner";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
@@ -53,8 +53,8 @@ const Login = () => {
     try {
       toast.loading("Logging in with Google...");
       await googleLogin();
-      toast.dismiss();
       toast.success("Successfully logged in with Google");
+      toast.dismiss();
       navigate(location.state ? location.state : "/");
     } catch (err) {
       console.error(err);
@@ -128,15 +128,10 @@ const Login = () => {
           </Button>
           <Typography variant="small" className="mt-6 flex justify-center">
             New to the site?
-            <Typography
-              as="a"
-              href="#signup"
-              variant="small"
-              color="blue-gray"
-              className="ml-1 font-bold"
-            >
-              Register
-            </Typography>
+            <Link to="/register" className="ml-1 font-bold text-blue-gray-500">
+           
+           Register
+          </Link>
           </Typography>
         </CardFooter>
       </Card>
