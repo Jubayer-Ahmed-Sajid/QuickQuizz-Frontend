@@ -9,7 +9,7 @@ import {
 import { createContext, useEffect, useState } from "react";
 import { auth } from "../firebase.config";
 
-export const authContext = createContext();
+export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -47,7 +47,7 @@ const AuthProvider = ({ children }) => {
 
   const authInfo = { Login, Logout, googleLogin, createUser, user, loading };
   return (
-    <authContext.Provider value={authInfo}>{children}</authContext.Provider>
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
 };
 export default AuthProvider;

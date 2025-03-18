@@ -10,14 +10,24 @@ import {
 } from "@material-tailwind/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import useAuth from "../../Hooks/useAuth";
+import { toast } from "sonner";
+import { FcGoogle } from "react-icons/fc";
 const Register = () => {
+  const axiosPublic = useAxiosPublic();
+
+  const { createUser,googleLogin} = useAuth();
+ 
+
+  // Initialize formik for form handling
   const formik = useFormik({
     initialValues: {
       email: "",
       name: "",
       password: "",
     },
+    // Define validation schema using Yup
     validationSchema: Yup.object({
       name: Yup.string()
         .max(15, "Must be 15 characters or less")
@@ -31,14 +41,53 @@ const Register = () => {
         )
         .required("Required"),
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    // Handle form submission
+    onSubmit: async (values) => {
+      try {
+        // Log form values
+        toast.loading("Creating new user...")
+        console.log(values);
+        const name = values.name;
+        const email = values.email;
+        const user = { name, email };
+        const password = values.password;
+        // create new user
+        await createUser(email,password);
+        // Send registration request
+        const res = await axiosPublic.post("/users/register", user);
+        if(res?.data){
+          toast.dismiss();
+          toast.success(`${name} successfully registered`)
+        }
+
+        // Log response data
+        console.log(res.data);
+      } catch (err) {
+        // Log any errors
+        console.error(err);
+        toast.dismiss();
+        toast.error(err.message);
+      }
     },
   });
 
+  const handleGoogleLogin = async ()=>{
+    try {
+      toast.loading("Logging in with Google...")
+      await googleLogin();
+      toast.dismiss();
+      toast.success("Successfully logged in with Google")
+    } catch (err) {
+      console.error(err);
+      toast.dismiss();
+      toast.error(err.message);
+    }
+  }
+
   return (
     <form
-      onSubmit={formik.handleSubmit}
+    // Handle form submission
+      onSubmit={formik.handleSubmit} 
       className="flex items-center justify-center h-screen"
     >
       <Card className="w-96">
@@ -59,11 +108,11 @@ const Register = () => {
             id="name"
             name="name"
             type="name"
-            onChange={formik.handleChange}
-            value={formik.values.name}
+            onChange={formik.handleChange} // Handle input change
+            value={formik.values.name} // Set input value
           />
           {formik.touched.name && formik.errors.name ? (
-            <p className="text-red-400 text-md">{formik.errors.name}</p>
+            <p className="text-red-400 text-md">{formik.errors.name}</p> // Display validation error
           ) : null}
           <Input
             label="Email"
@@ -71,11 +120,11 @@ const Register = () => {
             id="email"
             name="email"
             type="email"
-            onChange={formik.handleChange}
-            value={formik.values.email}
+            onChange={formik.handleChange} // Handle input change
+            value={formik.values.email} // Set input value
           />
           {formik.touched.email && formik.errors.email ? (
-            <p className="text-red-400 text-md">{formik.errors.email}</p>
+            <p className="text-red-400 text-md">{formik.errors.email}</p> // Display validation error
           ) : null}
           <Input
             label="Password"
@@ -83,11 +132,11 @@ const Register = () => {
             id="password"
             name="password"
             type="password"
-            onChange={formik.handleChange}
-            value={formik.values.password}
+            onChange={formik.handleChange} // Handle input change
+            value={formik.values.password} // Set input value
           />
           {formik.touched.password && formik.errors.password ? (
-            <p className="text-red-400 text-md">{formik.errors.password}</p>
+            <p className="text-red-400 text-md">{formik.errors.password}</p> // Display validation error
           ) : null}
           <div className="-ml-2.5">
             <Checkbox label="Remember Me" />
@@ -97,6 +146,14 @@ const Register = () => {
         <CardFooter className="pt-0">
           <Button type="submit" variant="gradient" fullWidth>
             Register
+          </Button>
+          <div className="flex my-4 gap-4 mx-auto justify-center items-center">
+            <hr className=" w-full text-black"/>
+           <p className="text-black font-semibold text-lg">OR </p> 
+            <hr className="w-full text-black"/>
+          </div>
+          <Button variant="gradient" fullWidth className="flex items-center justify-center" onClick={handleGoogleLogin}>
+           Login with Google <FcGoogle className="ml-2 text-xl"/>
           </Button>
           <Typography variant="small" className="mt-6 flex justify-center">
             Already have an account?
