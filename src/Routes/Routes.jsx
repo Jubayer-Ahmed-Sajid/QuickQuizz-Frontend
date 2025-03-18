@@ -3,6 +3,8 @@ import MainLayout from "../Layout/MainLayout";
 import Home from "../Pages/Home/Home";
 import Register from "../Pages/Authentication/Register";
 import Login from "../Pages/Authentication/Login";
+import Quizzes from "../Pages/Quizzes/Quizzes";
+import PrivateRoutes from "./PrivateRoutes/PrivateRoutes";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -19,6 +21,11 @@ export const router = createBrowserRouter([
       {
         path: "/login",
         element:<Login></Login>
+      },
+      {
+        path:"/quizzes",
+        element:<PrivateRoutes>
+          <Quizzes/></PrivateRoutes>
       }
     ],
   },

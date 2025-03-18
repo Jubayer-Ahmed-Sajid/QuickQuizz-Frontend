@@ -14,8 +14,11 @@ import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import useAuth from "../../Hooks/useAuth";
 import { toast } from "sonner";
 import { FcGoogle } from "react-icons/fc";
+import { useLocation, useNavigate } from "react-router-dom";
 const Register = () => {
   const axiosPublic = useAxiosPublic();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const { createUser,googleLogin} = useAuth();
  
@@ -58,6 +61,7 @@ const Register = () => {
         if(res?.data){
           toast.dismiss();
           toast.success(`${name} successfully registered`)
+          navigate(location.state ? location.state : '/');
         }
 
         // Log response data
@@ -77,6 +81,7 @@ const Register = () => {
       await googleLogin();
       toast.dismiss();
       toast.success("Successfully logged in with Google")
+      navigate(location.state ? location.state : '/');
     } catch (err) {
       console.error(err);
       toast.dismiss();

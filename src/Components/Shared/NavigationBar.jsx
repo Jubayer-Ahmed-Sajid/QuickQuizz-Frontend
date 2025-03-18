@@ -22,8 +22,8 @@ const NavigationBar = () => {
       <NavLink to="/" className="flex items-center">
         Home
       </NavLink>
-      <NavLink to="/" className="flex items-center">
-        Home
+      <NavLink to="/quizzes" className="flex items-center">
+       Quizzes
       </NavLink>
       <NavLink to="/" className="flex items-center">
         Home
