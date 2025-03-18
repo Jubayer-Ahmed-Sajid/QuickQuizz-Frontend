@@ -10,8 +10,15 @@ import {
 } from "@material-tailwind/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import useAuth from "../../Hooks/useAuth";
+import { toast } from "sonner";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
+  const { login, googleLogin } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -27,10 +34,34 @@ const Login = () => {
         )
         .required("Required"),
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      try {
+        toast.loading("Logging in...");
+        const { email, password } = values;
+        await login(email, password);
+        toast.dismiss();
+        toast.success("Logged in successfully");
+        navigate(location.state ? location.state : "/");
+      } catch (err) {
+        toast.dismiss();
+        toast.error(err.message);
+      }
     },
   });
+
+  const handleGoogleLogin = async () => {
+    try {
+      toast.loading("Logging in with Google...");
+      await googleLogin();
+      toast.dismiss();
+      toast.success("Successfully logged in with Google");
+      navigate(location.state ? location.state : "/");
+    } catch (err) {
+      console.error(err);
+      toast.dismiss();
+      toast.error(err.message);
+    }
+  };
 
   return (
     <form
@@ -81,6 +112,19 @@ const Login = () => {
         <CardFooter className="pt-0">
           <Button type="submit" variant="gradient" fullWidth>
             Login
+          </Button>
+          <div className="flex my-4 gap-4 mx-auto justify-center items-center">
+            <hr className=" w-full text-black" />
+            <p className="text-black font-semibold text-lg">OR </p>
+            <hr className="w-full text-black" />
+          </div>
+          <Button
+            variant="gradient"
+            fullWidth
+            className="flex items-center justify-center"
+            onClick={handleGoogleLogin}
+          >
+            Login with Google <FcGoogle className="ml-2 text-xl" />
           </Button>
           <Typography variant="small" className="mt-6 flex justify-center">
             New to the site?
