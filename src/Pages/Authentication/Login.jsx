@@ -16,7 +16,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
-  const { login, googleLogin } = useAuth();
+  const { Login, googleLogin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const formik = useFormik({
@@ -38,7 +38,7 @@ const Login = () => {
       try {
         toast.loading("Logging in...");
         const { email, password } = values;
-        await login(email, password);
+        await Login(email, password);
         toast.dismiss();
         toast.success("Logged in successfully");
         navigate(location.state ? location.state : "/");
